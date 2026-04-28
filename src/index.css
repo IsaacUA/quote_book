@@ -1,22 +1,23 @@
-/* 1. Global Viewport Fix */
+/* 1. Global Viewport Reset */
 html,
 body {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow-x: hidden;
-  background: #f8f8f8;
-  -webkit-font-smoothing: antialiased;
+  height: 100svh;
+  overflow: hidden;
+  background: #f4f4f4;
+  position: fixed;
 }
 
+/* 2. Grid Layout for Centering */
 .app-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
   width: 100vw;
+  height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
 }
 
 .book-view {
@@ -25,81 +26,105 @@ body {
   justify-content: center;
   width: 100%;
   gap: 20px;
+  padding-bottom: 50px;
+}
+
+@media (min-width: 769px) {
+  .book-view {
+    padding-bottom: 0;
+  }
 }
 
 .flipbook-wrapper {
   position: relative;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
   background: #fff;
-  border-radius: 4px;
-  overflow: hidden;
+  line-height: 0;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: transform;
 }
 
-/* 2. Unified Button Style */
-.action-btn {
-  /* Dimensions */
-  width: 56px;
-  height: 56px;
+/* 3. THE "VISIBLE BOOK" FIX */
+.page-wrapper {
+  background: white;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
 
-  /* Appearance */
-  background: #1a1a1a; /* Dark theme for all buttons */
-  color: #ffffff;
+/* Force the internal react-pdf container to fill the wrapper */
+.react-pdf__Page {
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Force the Canvas to be visible and correctly scaled */
+.page-wrapper canvas,
+.page-wrapper .react-pdf__Page__canvas {
+  display: block !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain !important;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+}
+
+/* 4. Action Buttons */
+.action-btn {
+  width: 48px;
+  height: 48px;
+  background: #111;
+  color: #fff;
   border: none;
   border-radius: 50%;
-
-  /* Flex Centering */
   display: flex;
   align-items: center;
   justify-content: center;
-
-  /* Interaction */
   cursor: pointer;
-  transition:
-    transform 0.2s ease,
-    background 0.2s ease;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-
-  /* Safari Reset */
-  -webkit-appearance: none;
-  -webkit-tap-highlight-color: transparent;
   z-index: 100;
+  transition: transform 0.1s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .action-btn:active {
-  transform: scale(0.92);
-  background: #333;
+  transform: scale(0.9);
 }
 
-/* 3. Button Placement */
+/* 5. Controls */
 .music-toggle {
   position: fixed;
-  bottom: 30px;
-  right: 30px;
+  bottom: 25px;
+  right: 25px;
 }
 
-/* Specific icon sizing */
+.mobile-controls {
+  position: fixed;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  padding: 8px 20px;
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 40px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
 .icon-text {
-  font-size: 22px;
-  line-height: 1;
-  font-family: serif; /* Helps Safari render unicode symbols as text */
-  user-select: none;
-}
-
-.page-wrapper {
-  background-color: white;
-}
-
-/* 4. Mobile Adjustments */
-@media (max-width: 768px) {
-  .app-container {
-    justify-content: flex-start;
-    padding-top: 60px;
-  }
-
-  .music-toggle {
-    bottom: 20px;
-    right: 20px;
-    width: 50px;
-    height: 50px;
-  }
+  font-size: 18px;
+  color: #fff !important;
+  font-family: serif;
 }
