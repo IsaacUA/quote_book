@@ -1,64 +1,105 @@
+/* 1. Global Viewport Fix */
+html,
 body {
   margin: 0;
-  font-family: Inter, sans-serif;
-  background: #f6f6f6;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  background: #f8f8f8;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* layout */
-.book-wrapper {
+.app-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100vw;
+}
+
+.book-view {
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: 100%;
   gap: 20px;
 }
 
-/* flipbook */
-.flipbook {
-  border-radius: 16px;
+.flipbook-wrapper {
+  position: relative;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
+  background: #fff;
+  border-radius: 4px;
   overflow: hidden;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
 }
 
-/* page */
-.page {
-  background: white;
-}
+/* 2. Unified Button Style */
+.action-btn {
+  /* Dimensions */
+  width: 56px;
+  height: 56px;
 
-/* buttons */
-.btn {
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
+  /* Appearance */
+  background: #1a1a1a; /* Dark theme for all buttons */
+  color: #ffffff;
   border: none;
-  background: white;
-  cursor: pointer;
+  border-radius: 50%;
 
+  /* Flex Centering */
   display: flex;
   align-items: center;
   justify-content: center;
 
-  font-size: 20px;
+  /* Interaction */
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
-
-  transition: all 0.2s ease;
+  /* Safari Reset */
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: transparent;
+  z-index: 100;
 }
 
-.btn:hover {
-  transform: translateY(-2px);
+.action-btn:active {
+  transform: scale(0.92);
+  background: #333;
 }
 
-.btn:active {
-  transform: scale(0.95);
-}
-
-/* music button special */
-.music-btn {
+/* 3. Button Placement */
+.music-toggle {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: 30px;
+  right: 30px;
+}
+
+/* Specific icon sizing */
+.icon-text {
+  font-size: 22px;
+  line-height: 1;
+  font-family: serif; /* Helps Safari render unicode symbols as text */
+  user-select: none;
+}
+
+.page-wrapper {
+  background-color: white;
+}
+
+/* 4. Mobile Adjustments */
+@media (max-width: 768px) {
+  .app-container {
+    justify-content: flex-start;
+    padding-top: 60px;
+  }
+
+  .music-toggle {
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+  }
 }
