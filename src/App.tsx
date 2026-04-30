@@ -1,74 +1,134 @@
-import { useEffect, useRef, useState } from 'react'
-import { Document, Page, pdfjs } from 'react-pdf'
-import bookPdf from '/book.pdf'
-import music from '/music.mp3'
+import { useState, useRef } from 'react'
+import './App.css'
+import data from './data/data.json'
+type Message = {
+  id: number
+  from: string
+  avatar: string
+  thread: string[]
+}
 
-// Initialize the PDF Worker
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
-
-export default function VerticalPdfApp() {
+export default function App() {
+  const [screen, setScreen] = useState<'home' | 'music' | 'messages'>('home')
+  const [selectedMessage, setSelectedMessage] = useState<Message | null>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
-  const [numPages, setNumPages] = useState(0)
+  const [currentTrack, setCurrentTrack] = useState<number | null>(null)
   const [isPlaying, setIsPlaying] = useState(false)
-  const [width, setWidth] = useState(window.innerWidth)
 
-  // Handle responsive scaling
-  useEffect(() => {
-    const handleResize = () => {
-      const newWidth =
-        window.innerWidth <= 768
-          ? window.innerWidth * 0.95
-          : Math.min(window.innerWidth * 0.8, 800)
-      setWidth(newWidth)
+  const toggleTrack = (track: any) => {
+    const audio = audioRef.current
+    if (!audio) return
+    if (currentTrack === track.id) {
+      isPlaying ? audio.pause() : audio.play()
+      setIsPlaying(!isPlaying)
+      return
     }
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
+    audio.src = `./music/${track.id}.mp3`
+    audio.play()
+    setCurrentTrack(track.id)
+    setIsPlaying(true)
+  }
 
-  const toggleMusic = () => {
-    if (!audioRef.current) return
-    if (isPlaying) {
-      audioRef.current.pause()
-    } else {
-      audioRef.current.play()
+  const renderScreen = () => {
+    if (screen === 'music') {
+      return (
+        <div className="content p5-panel">
+          <h1 className="jagged-header">PLAYLIST</h1>
+          <div className="music-list scrollable">
+            {data.music.map((track) => (
+              <div key={track.id} className="track-card">
+                <div className="track-info">
+                  <div className="track-title">{track.title}</div>
+                  <div className="track-artist">{track.artist}</div>
+                </div>
+                <button
+                  className="p5-btn-small"
+                  onClick={() => toggleTrack(track)}
+                >
+                  {currentTrack === track.id && isPlaying ? 'STOP' : 'PLAY'}
+                </button>
+              </div>
+            ))}
+          </div>
+          <button className="back-btn" onClick={() => setScreen('home')}>
+            RETURN
+          </button>
+        </div>
+      )
     }
-    setIsPlaying(!isPlaying)
+
+    if (screen === 'messages') {
+      return selectedMessage ? (
+        <div className="content p5-panel">
+          <h1 className="jagged-header">{selectedMessage.from}</h1>
+          <div className="thread-list scrollable">
+            {selectedMessage.thread.map((msg, i) => (
+              <div
+                key={i}
+                className={`message-row ${i % 2 === 0 ? 'row-left' : 'row-right'}`}
+              >
+                <div className="avatar-frame">
+                  <img src={selectedMessage.avatar} alt="face" />
+                </div>
+                <div className="message-bubble-p5">{msg}</div>
+              </div>
+            ))}
+          </div>
+          <button className="back-btn" onClick={() => setSelectedMessage(null)}>
+            BACK
+          </button>
+        </div>
+      ) : (
+        <div className="content p5-panel">
+          <h1 className="jagged-header">MESSAGES</h1>
+          <div className="message-list scrollable">
+            {data.messages.map((msg) => (
+              <button
+                key={msg.id}
+                className="p5-list-item"
+                onClick={() => setSelectedMessage(msg)}
+              >
+                <div className="list-avatar-crop">
+                  <img src={msg.avatar} alt="" />
+                </div>
+                <span>{msg.from}</span>
+              </button>
+            ))}
+          </div>
+          <button className="back-btn" onClick={() => setScreen('home')}>
+            HOME
+          </button>
+        </div>
+      )
+    }
+
+    return (
+      <div className="home-container">
+        <div className="persona-logo-container">
+          <div className="logo-box box-1">PHANTOM</div>
+          <div className="logo-box box-2">PAST</div>
+        </div>
+        <div className="menu-vertical">
+          <button className="menu-btn" onClick={() => setScreen('music')}>
+            SYSTEM/MUSIC
+          </button>
+          <button className="menu-btn" onClick={() => setScreen('messages')}>
+            VIEW/MESSAGES
+          </button>
+        </div>
+      </div>
+    )
   }
 
   return (
-    <div className="vertical-app">
-      <div className="pdf-viewport">
-        <Document
-          file={bookPdf}
-          onLoadSuccess={({ numPages }) => setNumPages(numPages)}
-          loading={<div className="custom-loader">Preparing book...</div>}
-        >
-          {Array.from(new Array(numPages), (_, index) => (
-            <div key={`page_${index + 1}`} className="pdf-page-card">
-              <Page
-                pageNumber={index + 1}
-                width={width}
-                renderTextLayer={false}
-                renderAnnotationLayer={false}
-                scale={1.5}
-                loading={
-                  <div
-                    className="page-skeleton"
-                    style={{ width, height: '600px' }}
-                  />
-                }
-              />
-            </div>
-          ))}
-        </Document>
+    <div className="p5-stage">
+      <audio ref={audioRef} />
+      <div className="phone-tilt-wrapper">
+        <div className={`phone-frame ${screen}`}>
+          <div className="scanline-overlay" />
+          {renderScreen()}
+        </div>
       </div>
-
-      <audio ref={audioRef} src={music} loop />
-
-      <button className="music-toggle-btn" onClick={toggleMusic}>
-        {isPlaying ? 'Stop Music' : 'Play Music'}
-      </button>
     </div>
   )
 }
