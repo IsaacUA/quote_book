@@ -1,6 +1,7 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import './App.css'
 import data from './data/data.json'
+
 type Message = {
   id: number
   from: string
@@ -11,9 +12,40 @@ type Message = {
 export default function App() {
   const [screen, setScreen] = useState<'home' | 'music' | 'messages'>('home')
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  const [loadProgress, setLoadProgress] = useState(0)
+
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const [currentTrack, setCurrentTrack] = useState<number | null>(null)
   const [isPlaying, setIsPlaying] = useState(false)
+
+  // --- PRELOAD LOGIC ---
+  useEffect(() => {
+    const images = [
+      'assets/background_main.jpeg',
+      'assets/background_music.jpeg',
+      'assets/background_messages.jpeg',
+      ...data.messages.map((m) => m.avatar),
+    ]
+
+    let loadedCount = 0
+    images.forEach((src) => {
+      const img = new Image()
+      img.src = src
+      img.onload = () => {
+        loadedCount++
+        setLoadProgress(Math.floor((loadedCount / images.length) * 100))
+        if (loadedCount === images.length) {
+          // Small delay so the user can actually see the cool loading bar
+          setTimeout(() => setIsLoading(false), 800)
+        }
+      }
+      img.onerror = () => {
+        loadedCount++ // Count even if it fails to avoid getting stuck
+        if (loadedCount === images.length) setIsLoading(false)
+      }
+    })
+  }, [])
 
   const toggleTrack = (track: any) => {
     const audio = audioRef.current
@@ -27,6 +59,24 @@ export default function App() {
     audio.play()
     setCurrentTrack(track.id)
     setIsPlaying(true)
+  }
+
+  // --- LOADING SCREEN ---
+  if (isLoading) {
+    return (
+      <div className="p5-stage">
+        <div className="loading-container">
+          <div className="loading-text">ЗАГАРБАЙ СВОЄ ЗАВТРА...</div>
+          <div className="loading-bar-rail">
+            <div
+              className="loading-bar-fill"
+              style={{ width: `${loadProgress}%` }}
+            ></div>
+          </div>
+          <div className="loading-percent">{loadProgress}%</div>
+        </div>
+      </div>
+    )
   }
 
   const renderScreen = () => {

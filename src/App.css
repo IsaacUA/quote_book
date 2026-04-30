@@ -1,5 +1,5 @@
 :root {
-  --p5-red: #d32f2f;
+  --p5-red: #5a3944;
   --p5-black: #000000;
   --p5-white: #ffffff;
 }
@@ -23,7 +23,7 @@ body {
 }
 
 .p5-stage {
-  background-color: var(--p5-black);
+  background-color: var(--p5-red);
 
   background-image:
     linear-gradient(45deg, #1a1a1a 25%, transparent 25%),
@@ -76,12 +76,12 @@ body {
 }
 
 .scanline-overlay {
-  position: absolute;
+  /* position: absolute;
   inset: 0;
   background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.15) 50%);
   background-size: 100% 4px;
   pointer-events: none;
-  z-index: 10;
+  z-index: 10; */
 }
 
 .content {
@@ -170,7 +170,7 @@ body {
   padding: 30px;
   position: relative;
 
-  background-image: url(assets/background_2.jpeg);
+  background-image: url(assets/background_main.jpeg);
   background-clip: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -178,21 +178,21 @@ body {
 }
 
 .music-container {
-  background-image: url(assets/background_3.jpeg);
+  background-image: url(assets/background_music.jpeg);
   background-clip: cover;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 }
 .messages-container {
-  background-image: url(assets/background_4.jpeg);
+  background-image: url(assets/background_messages.jpeg);
   background-clip: cover;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
 }
 .home-container::before {
-  content: '';
+  /* content: '';
   position: absolute;
   inset: 0;
   opacity: 0.2;
@@ -202,16 +202,16 @@ body {
     black 10px,
     transparent 10px,
     transparent 20px
-  );
+  ); */
 }
 
-.persona-logo-container {
+/* .persona-logo-container {
   margin-top: 40px;
   transform: rotate(-7deg);
   position: relative;
   z-index: 2;
-}
-.logo-box {
+} */
+/* .logo-box {
   background: var(--p5-black);
   color: white;
   font-size: 2.2rem;
@@ -224,16 +224,17 @@ body {
   margin-left: 40px;
   background: white;
   color: black;
-}
+} */
 
 .menu-vertical {
   margin-top: auto;
   margin-bottom: 40px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 2px;
   position: relative;
   z-index: 2;
+  width: 70%;
 }
 .menu-btn {
   background: black;
@@ -244,13 +245,17 @@ body {
   font-weight: 900;
   font-size: 1.1rem;
   cursor: pointer;
-  clip-path: polygon(0 0, 100% 15%, 95% 100%, 0% 85%);
+  /* Shattered Shape */
+  clip-path: polygon(0 15%, 100% 0, 95% 85%, 5% 100%);
+  border-left: 5px solid var(--p5-red);
   transition: 0.1s;
 }
+
 .menu-btn:hover {
   transform: scale(1.05) rotate(-2deg);
   background: white;
   color: black;
+  box-shadow: 5px 5px 0px var(--p5-red);
 }
 
 .back-btn {
@@ -261,8 +266,18 @@ body {
   padding: 10px 25px;
   font-weight: bold;
   cursor: pointer;
-  transform: skew(-15deg);
+  /* Shattered Shape */
+  clip-path: polygon(5% 0%, 100% 12%, 92% 100%, 0% 88%);
+  border-right: 4px solid var(--p5-red);
   flex-shrink: 0;
+  transition: 0.1s;
+}
+
+.back-btn:hover {
+  background: white;
+  color: black;
+  transform: scale(1.1) skew(-5deg);
+  box-shadow: -5px 5px 0px var(--p5-red);
 }
 
 .track-card {
@@ -398,4 +413,198 @@ body {
 .p5-btn-text {
   letter-spacing: 1px;
   font-style: italic;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+}
+
+.loading-text {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  background: var(--p5-red);
+  padding: 5px 20px;
+  transform: skew(-15deg) rotate(-2deg);
+  box-shadow: 6px 6px 0px black;
+}
+
+.loading-bar-rail {
+  width: 300px;
+  height: 30px;
+  background: white;
+  transform: skew(-20deg);
+  position: relative;
+  overflow: hidden;
+  border: 4px solid black;
+}
+
+.loading-bar-fill {
+  height: 100%;
+  background: var(--p5-red);
+  transition: width 0.3s ease-out;
+  position: relative;
+}
+
+/* Diagonal stripes on the loading bar */
+.loading-bar-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.2) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.2) 50%,
+    rgba(0, 0, 0, 0.2) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 40px 40px;
+}
+
+.loading-percent {
+  margin-top: 15px;
+  font-size: 2rem;
+  font-style: italic;
+  text-shadow: 4px 4px var(--p5-red);
+}
+.persona-logo-container {
+  margin-top: 40px;
+  position: relative;
+  z-index: 2;
+  /* Rotate container slightly less, individual boxes handle skew */
+  transform: rotate(-3deg);
+}
+
+.logo-box {
+  font-family: 'Arial Black', sans-serif;
+  font-size: 2rem;
+  padding: 5px 20px;
+  width: fit-content;
+  font-style: italic;
+  text-transform: uppercase;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Create the sharp, glittering edge effect on the boxes themselves */
+  box-shadow:
+    3px 3px 0px rgba(255, 255, 255, 0.8),
+    /* Inner "glitter" edge */ 8px 8px 0px var(--p5-black); /* Main offset shadow */
+}
+
+/* Base style for Box 1 (Top) */
+.box-1 {
+  background: var(--p5-black);
+  color: white;
+  transform: skew(-15deg) rotate(-2deg);
+  z-index: 2;
+  margin-left: -10px;
+}
+
+/* Base style for Box 2 (Bottom) */
+.box-2 {
+  background: white;
+  color: black;
+  margin-left: 50px;
+  transform: skew(-10deg) rotate(3deg);
+  z-index: 1;
+}
+
+/* The Glittering Shine Pseudo-element */
+.logo-box::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.9),
+    /* Bright white "glitter" pulse */ transparent
+  );
+  transform: skewX(-20deg);
+  animation: logo-glitter 4s infinite;
+}
+
+/* Box 1 glitter color tweak (more red/silver) */
+.box-1::after {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #ffc4c4,
+    /* Reddish/Silver light */ transparent
+  );
+  animation-delay: 0.5s; /* Stagger animations */
+}
+
+/* Box 2 glitter color tweak (pure sharp white) */
+.box-2::after {
+  animation-delay: 2s; /* Stagger animations */
+}
+
+/* Text animation to shake slightly on glitter pulse */
+.logo-box span {
+  display: block;
+  animation: text-jitter 4s infinite;
+}
+.box-1 span {
+  animation-delay: 0.5s;
+}
+.box-2 span {
+  animation-delay: 2s;
+}
+
+/* KEYFRAMES */
+
+/* Glitter/Shine animation sweeping across */
+@keyframes logo-glitter {
+  0% {
+    left: -100%;
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  20% {
+    left: 100%;
+    opacity: 0;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+/* Subtle jitter when glitter passes */
+@keyframes text-jitter {
+  0%,
+  9%,
+  21%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  10% {
+    transform: translate(-2px, 1px) scale(1.02);
+    color: #ff0000;
+  } /* Temporary red "glitch" */
+  12% {
+    transform: translate(2px, -1px) scale(1.01);
+  }
+  14% {
+    transform: translate(-1px, -1px) scale(1.01);
+  }
+  16% {
+    transform: translate(1px, 1px) scale(1);
+    color: inherit;
+  }
 }
