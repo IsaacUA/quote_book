@@ -7,9 +7,14 @@
 * {
   box-sizing: border-box;
 }
-body,
-html {
-  overscroll-behavior: none;
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden; /* 🔒 disables page scroll (key fix) */
+  position: fixed; /* 🔒 kills iOS rubber band scrolling */
 }
 body {
   margin: 0;
@@ -19,20 +24,27 @@ body {
 
 .p5-stage {
   background-color: var(--p5-black);
+
   background-image:
     linear-gradient(45deg, #1a1a1a 25%, transparent 25%),
     linear-gradient(-45deg, #1a1a1a 25%, transparent 25%),
     linear-gradient(45deg, transparent 75%, #1a1a1a 75%),
     linear-gradient(-45deg, transparent 75%, #1a1a1a 75%);
+
   background-size: 100px 100px;
+
   display: flex;
   justify-content: center;
   align-items: center;
+
+  width: 100vw;
+  height: 100vh;
+
+  height: 100dvh; /* ✅ modern fix for iOS Safari */
   min-height: 100vh;
+
   overflow: hidden;
   perspective: 1200px;
-  height: 100svh; /* Forces the height to respect Safari's UI bars */
-  overflow: hidden; /* Prevents the body from scrolling horizontally */
 }
 
 .phone-tilt-wrapper {
