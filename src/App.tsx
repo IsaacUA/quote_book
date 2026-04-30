@@ -110,10 +110,10 @@ export default function App() {
         </div>
         <div className="menu-vertical">
           <button className="menu-btn" onClick={() => setScreen('music')}>
-            SYSTEM/MUSIC
+            MUSIC
           </button>
           <button className="menu-btn" onClick={() => setScreen('messages')}>
-            VIEW/MESSAGES
+            MESSAGES
           </button>
         </div>
       </div>
