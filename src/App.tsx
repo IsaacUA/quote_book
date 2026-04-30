@@ -32,7 +32,7 @@ export default function App() {
   const renderScreen = () => {
     if (screen === 'music') {
       return (
-        <div className="content p5-panel">
+        <div className="content p5-panel music-container">
           <h1 className="jagged-header">PLAYLIST</h1>
           <div className="music-list scrollable">
             {data.music.map((track) => (
@@ -42,10 +42,15 @@ export default function App() {
                   <div className="track-artist">{track.artist}</div>
                 </div>
                 <button
-                  className="p5-btn-small"
+                  className={`p5-control-btn ${currentTrack === track.id && isPlaying ? 'is-playing' : ''}`}
                   onClick={() => toggleTrack(track)}
                 >
-                  {currentTrack === track.id && isPlaying ? 'STOP' : 'PLAY'}
+                  <div className="p5-icon-container">
+                    <div className="p5-icon-shape"></div>
+                  </div>
+                  <span className="p5-btn-text">
+                    {currentTrack === track.id && isPlaying ? 'STOP' : 'PLAY'}
+                  </span>
                 </button>
               </div>
             ))}
@@ -59,7 +64,7 @@ export default function App() {
 
     if (screen === 'messages') {
       return selectedMessage ? (
-        <div className="content p5-panel">
+        <div className="content p5-panel messages-container">
           <h1 className="jagged-header">{selectedMessage.from}</h1>
           <div className="thread-list scrollable">
             {selectedMessage.thread.map((msg, i) => (
@@ -79,7 +84,7 @@ export default function App() {
           </button>
         </div>
       ) : (
-        <div className="content p5-panel">
+        <div className="content p5-panel messages-container">
           <h1 className="jagged-header">MESSAGES</h1>
           <div className="message-list scrollable">
             {data.messages.map((msg) => (
@@ -105,8 +110,8 @@ export default function App() {
     return (
       <div className="home-container">
         <div className="persona-logo-container">
-          <div className="logo-box box-1">PHANTOM</div>
-          <div className="logo-box box-2">PAST</div>
+          <div className="logo-box box-1">Тисячоликий</div>
+          <div className="logo-box box-2">Герой</div>
         </div>
         <div className="menu-vertical">
           <button className="menu-btn" onClick={() => setScreen('music')}>
