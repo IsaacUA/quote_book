@@ -1,7 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
 import './App.css'
 import data from './data/data.json'
-
+import background_main from './assets/background_main.jpeg'
+import background_playlist from './assets/background_playlist.jpeg'
+import background_messages from './assets/background_messages.jpeg'
 type Message = {
   id: number
   from: string
@@ -22,22 +24,24 @@ export default function App() {
   // --- PRELOAD LOGIC ---
   useEffect(() => {
     const images = [
-      'assets/background_main.jpeg',
-      'assets/background_music.jpeg',
-      'assets/background_messages.jpeg',
+      background_main,
+      background_playlist,
+      background_messages,
       ...data.messages.map((m) => m.avatar),
     ]
 
     let loadedCount = 0
     images.forEach((src) => {
       const img = new Image()
+      img.decoding = 'async'
+      img.loading = 'eager'
       img.src = src
       img.onload = () => {
         loadedCount++
         setLoadProgress(Math.floor((loadedCount / images.length) * 100))
         if (loadedCount === images.length) {
           // Small delay so the user can actually see the cool loading bar
-          setTimeout(() => setIsLoading(false), 800)
+          setTimeout(() => setIsLoading(false), 1500)
         }
       }
       img.onerror = () => {
@@ -83,7 +87,7 @@ export default function App() {
     if (screen === 'music') {
       return (
         <div className="content p5-panel music-container">
-          <h1 className="jagged-header">PLAYLIST</h1>
+          <h1 className="jagged-header">МʼЮЗІК</h1>
           <div className="music-list scrollable">
             {data.music.map((track) => (
               <div key={track.id} className="track-card">
@@ -106,7 +110,7 @@ export default function App() {
             ))}
           </div>
           <button className="back-btn" onClick={() => setScreen('home')}>
-            RETURN
+            НАЗАД
           </button>
         </div>
       )
@@ -130,12 +134,12 @@ export default function App() {
             ))}
           </div>
           <button className="back-btn" onClick={() => setSelectedMessage(null)}>
-            BACK
+            НАЗАД
           </button>
         </div>
       ) : (
         <div className="content p5-panel messages-container">
-          <h1 className="jagged-header">MESSAGES</h1>
+          <h1 className="jagged-header">ЦИТАТИ</h1>
           <div className="message-list scrollable">
             {data.messages.map((msg) => (
               <button
@@ -151,7 +155,7 @@ export default function App() {
             ))}
           </div>
           <button className="back-btn" onClick={() => setScreen('home')}>
-            HOME
+            НАЗАД
           </button>
         </div>
       )
@@ -165,10 +169,10 @@ export default function App() {
         </div>
         <div className="menu-vertical">
           <button className="menu-btn" onClick={() => setScreen('music')}>
-            MUSIC
+            МʼЮЗІК
           </button>
           <button className="menu-btn" onClick={() => setScreen('messages')}>
-            MESSAGES
+            ЦИТАТИ
           </button>
         </div>
       </div>

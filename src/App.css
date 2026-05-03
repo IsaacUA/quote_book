@@ -178,7 +178,7 @@ body {
 }
 
 .music-container {
-  background-image: url(assets/background_music.jpeg);
+  background-image: url(assets/background_playlist.jpeg);
   background-clip: cover;
   background-position: center;
   background-repeat: no-repeat;
