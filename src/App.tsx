@@ -59,7 +59,7 @@ export default function App() {
       setIsPlaying(!isPlaying)
       return
     }
-    audio.src = `./music/${track.id}.mp3`
+    audio.src = `./music/music_${track.id}.mp3`
     audio.play()
     setCurrentTrack(track.id)
     setIsPlaying(true)

@@ -1,9 +1,5 @@
 {
-  "music": [
-    { "id": 1, "title": "Almost Blue", "artist": "Chet Baker" },
-    { "id": 2, "title": "Spartacus Love Theme", "artist": "Bill Evans" },
-    { "id": 3, "title": "Waltz For Debby", "artist": "Bill Evans" }
-  ],
+  "music": [{ "id": 1, "title": "The Oracle", "artist": "Malte Marten" }],
   "messages": [
     {
       "id": 1,
